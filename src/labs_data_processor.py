@@ -7,7 +7,7 @@ import re
 
 PREPROC_PTH = "../data/preprocessed"
 CLEAN_PTH = "../data/clean"
-GRF_TEST_IDS = []
+GRF_TEST_IDS = ["17341.0", "3086.0"]
 
 class LabDataProcessor:
     """
@@ -396,10 +396,12 @@ class DataFinalizer:
         tmp = test_order.index.values
         tmp = [str(x) for x in tmp]
         relevant_tests = tmp[:num_of_tests]
+        relevant_tests = relevant_tests + GRF_TEST_IDS
         return relevant_tests
 
     def one_hot_enc(self, data:pd.DataFrame) -> pd.DataFrame:
         relevant_tests = self.get_relevant_tests(data=data)
+        data["NCLP_E"] = data["NCLP_E"].astype(str)
         sub_data = data[data['NCLP_E'].isin(relevant_tests)]
         # Get one hot encoding of column NCLP_E
         one_hot = pd.get_dummies(sub_data['NCLP_E'])
