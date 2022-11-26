@@ -416,7 +416,7 @@ class DataFinalizer:
         data = pd.merge(left=lab_data, right=diag_data, how="left", on="patient_id")
         return data
 
-    def get_relevant_tests(self, data:pd.DataFrame, num_of_tests:int=10)->list:
+    def get_relevant_tests(self, data:pd.DataFrame, num_of_tests:int=5)->list:
         pat = data.patient_id.unique().tolist()
         test_order = data.groupby(['NCLP_E']).apply(lambda grp: len(grp['patient_id'].unique())/len(pat)*100).sort_values(ascending=False)
         tmp = test_order.index.values
@@ -431,11 +431,22 @@ class DataFinalizer:
         sub_data = data[data['NCLP_E'].isin(relevant_tests)]
         # Get one hot encoding of column NCLP_E
         one_hot = pd.get_dummies(sub_data['NCLP_E'])
-        # Drop column B as it is now encoded
+        # Drop column as it is now encoded
         df = sub_data.drop('NCLP_E',axis = 1)
         # Join the encoded df
         df = df.join(one_hot)
+        ohe_cols = df.columns.values
+        ohe_cols = [x for x in ohe_cols if '.' in x]
+        df[ohe_cols] = df[ohe_cols].multiply(df["ValueNumber"], axis="index")
         return df
+
+    def process_categorical(self, data:pd.DataFrame) -> pd.DataFrame:
+        data.drop(columns=['patient_id', 'NCLP', 'ValueNumber'], inplace=True)
+        data['sex'] = np.where(data['sex'] == 'M', 1, 0)
+        categorical_cols = ['POD', 'result', 'sex', 'is_dia']
+        for col in categorical_cols:
+            data[col] = pd.Categorical(data[col])
+        return data
 
     def run(self):
         lab_data, diag_data = self.load_data()
@@ -443,6 +454,7 @@ class DataFinalizer:
         lab_data = self.reduce_lab_data(data=lab_data)
         data = self.merge_data(lab_data=lab_data, diag_data=diag_data)
         data = self.one_hot_enc(data=data)
+        data = self.process_categorical(data=data)
         data.to_pickle(f"{CLEAN_PTH}/full_data.pkl")
 
 
