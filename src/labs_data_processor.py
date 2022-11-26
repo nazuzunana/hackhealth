@@ -19,8 +19,8 @@ class DataProcessor:
         data = pd.read_csv(f'../data/{state}/{fname}', sep=sep)
         return data
 
-    def write_data(self, data:pd.DataFrame, fname:str, state:str=PREPROC_PTH, sep:str=';') -> None:
-        data.to_pickle(f'{state}/{fname}.pkl', sep=sep)
+    def write_data(self, data:pd.DataFrame, fname:str, state:str=PREPROC_PTH) -> None:
+        data.to_pickle(f'{state}/{fname}.pkl')
 
     def parse_dates(self, data:pd.DataFrame) -> pd.DataFrame:
         data['EntryDate'] = pd.to_datetime(data['EntryDate'], infer_datetime_format=True)
