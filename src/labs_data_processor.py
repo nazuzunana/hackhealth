@@ -56,8 +56,38 @@ class DataProcessor:
         else:
             return 5
 
+    def add_unified_nclp(self, data:pd.DataFrame) -> pd.DataFrame:
+        """
+        Adds NCLP_E column to have same NCLP codes based on Analyte column.
+        :param data:
+        :return:
+        """
+        # extract coding dict in form {53.0: ['s_a1 antitrypsin'],
+        #  54.0: ['s_a1 antitrypsin'],
+        #  80.0: ['Elfo Alfa 1'],
+        #  82.0: ['Elfo Alfa 1'],
+        #  88.0: ['Alfa-1-globulin'],
+        #  116.0: ['Elfo Alfa 2'],
+        #  118.0: ['Elfo Alfa 2'],
+        #  124.0: ['Alfa-2-globulin'],
+        #  149.0: ['ADV'],
+        #  159.0: ['s_Borrelia IgM'],
+        #  175.0: ['Brucella abortus protilátky - (agl)'], ....
+        # key -> NCLP code
+        # value -> all Analyte forms found in data
+        coding = data.groupby(['NCLP'])['Analyte'].apply(lambda grp: list(grp.value_counts().index)).to_dict()
+        # revert codes so we have Analyte as key and NCLP as single code
+        codes = {}
+        for k in coding.keys():
+            for n in coding[k]:
+                codes[n] = k
+
+        data['NCLP_E'] = data.Analyte.apply(lambda cell: codes.get(cell, np.nan))
+
+        return data
+
     def test_separator(self, data:pd.DataFrame) -> Tuple[(pd.DataFrame,)*2]:
-        nclp = data[~data['NCLP'].isna()]
+        nclp = data[~data['NCLP_E'].isna()]
         code = data[~data['Code'].isna()]
         return nclp, code
 
@@ -69,9 +99,13 @@ class DataProcessor:
         data = self.load_data(fname='LabsALL 2015-2022.csv')
         data = self.parse_dates(data=data)
         data = self.parse_numeric(data=data)
+        data = self.add_unified_nclp(data=data)
         nclp_data, code_data = self.test_separator(data=data)
         nclp_data = self.nclp_result(data=nclp_data)
         self.write_data(data=nclp_data, fname="nclp")
+
+
+
 
 if __name__ == "__main__":
     dp = DataProcessor()
