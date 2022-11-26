@@ -114,14 +114,40 @@ class LabDataProcessor:
         )
         return data
 
+    def consolidate_gfr(self, data):
+        """
+        Function merge all GFR measures into one NLCP_E value as it is basicaly the same test
+        evaluated differently, eg one is done from blood other from urine etc...
+        :param data:
+        :return:
+        """
+
+        gfr_string = "GFR-MDRD-1P|GFR-KR|GFR-KRKOR|GFR-MDRD-3P|eGFR-BM|GFR-MDRD"
+        data.loc[data.Analyte.str.contains(gfr_string, na=False), 'NCLP_E'] = 17341.0
+        return data
+
+    def consolidate_urea(self,data):
+        """
+        Merge NCLP_E code for urea test, one is from 1 hours other from 4 hours, but they measure exactly
+        same thing.
+        :param data:
+        :return:
+        """
+        data.loc[data.Analyte.str.contains("s_urea|p_urea", na=False), 'NCLP_E'] = 3086.0
+        return data
+
     def run(self):
         data = self.load_data(fname="LabsALL 2015-2022.csv")
         data = self.parse_dates(data=data)
         data = self.parse_numeric(data=data)
         data = self.add_unified_nclp(data=data)
+        data = self.consolidate_gfr(data=data)
+        data = self.consolidate_urea(data=data)
         nclp_data, code_data = self.test_separator(data=data)
         nclp_data = self.nclp_result(data=nclp_data)
         self.write_data(data=nclp_data, fname="nclp")
+
+
 
 
 class DiagDataProcessor:
