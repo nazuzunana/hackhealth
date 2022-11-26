@@ -445,5 +445,5 @@ class DataFinalizer:
 
 
 if __name__ == "__main__":
-    df = DataFinalizer()
+    df = DataFinalizer(process_lab_data=True)
     df.run()
