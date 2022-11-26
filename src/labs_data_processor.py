@@ -5,12 +5,9 @@ import datetime
 from typing import Tuple
 import re
 
-from data_preprocessing import diagnoses_preprocess
-from data_clean import diagnoses_clean
-
 PREPROC_PTH = "../data/preprocessed"
 CLEAN_PTH = "../data/clean"
-
+GRF_TEST_IDS = []
 
 class LabDataProcessor:
     """
@@ -319,11 +316,11 @@ class DiagDataProcessor:
 
     def run(self) -> None:
         print("Processing diagnoses...")
-        diagnoses_preprocess()
+        self.diagnoses_preprocess()
         print("Processing diagnoses done.")
 
         print("Diganoses clean start...")
-        diagnoses_clean()
+        self.diagnoses_clean()
         print("Diagnoses clean finished.")
 
 
@@ -393,12 +390,32 @@ class DataFinalizer:
         data = pd.merge(left=lab_data, right=diag_data, how="left", on="patient_id")
         return data
 
+    def get_relevant_tests(self, data:pd.DataFrame, num_of_tests:int=10)->list:
+        pat = data.patient_id.unique().tolist()
+        test_order = data.groupby(['NCLP_E']).apply(lambda grp: len(grp['patient_id'].unique())/len(pat)*100).sort_values(ascending=False)
+        tmp = test_order.index.values
+        tmp = [str(x) for x in tmp]
+        relevant_tests = tmp[:num_of_tests]
+        return relevant_tests
+
+    def one_hot_enc(self, data:pd.DataFrame) -> pd.DataFrame:
+        relevant_tests = self.get_relevant_tests(data=data)
+        sub_data = data[data['NCLP_E'].isin(relevant_tests)]
+        # Get one hot encoding of column NCLP_E
+        one_hot = pd.get_dummies(sub_data['NCLP_E'])
+        # Drop column B as it is now encoded
+        df = sub_data.drop('NCLP_E',axis = 1)
+        # Join the encoded df
+        df = df.join(one_hot)
+        return df
+
     def run(self):
         lab_data, diag_data = self.load_data()
         diag_data = self.flatten_data(data=diag_data)
         lab_data = self.reduce_lab_data(data=lab_data)
         data = self.merge_data(lab_data=lab_data, diag_data=diag_data)
-        data.to_pickle("tmp.pkl")
+        data = self.one_hot_enc(data=data)
+        data.to_pickle(f"{CLEAN_PTH}/full_data.pkl")
 
 
 if __name__ == "__main__":
