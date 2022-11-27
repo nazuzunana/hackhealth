@@ -19,6 +19,19 @@ Using data, we aim to identify people prone to having CKD to detect the disease 
 most prevalent test and baseline information like age or bmi to enable simple indentification at early stage
 for more descriptive tests.
 
+We have used IKEM data to build predictive model that would predict whether the patient has CKD based on laboratory
+results.  We have employed Machine Learning and Data Science to come up with a solution that helps determine risky 
+patients together with a strategy which would target and incentivize groups at risk. 
+Our predictive model can accurately determine a CKD patient by identifying core subgroup of 20% in our data
+which contained 99%
+
+![Model Lift Curve](./documentation/lift_plot.png)
+
+As you can see from the lift curve above the model was able to correctly identify nearly whole CKD population. 
+From the following figure we have identified that when we use cut-off 0.5 we reach above 90% accuracy.
+
+![Cut-off selection](./documentation/precision_plot.png)
+
 ## Data 
 
 For this challenge we got anonymized data from IKEM containing test results and list of diagnoses including CKD. 
@@ -55,17 +68,18 @@ cohort of CKD patients from 2022.
 
 **Synthetic dataset**
 
-This was used to ˚
+The synthetic dataset was our final dataset used for the model training where we have transposed the laboratory
+dataset so it could be joined on the diagnosis data. Later this data was stripped of patient IDs as it no longer
+served any need. As you can see from the in the report there are already seen some level of corelations and cross
+dependencies. One of the most significant is corelation between age and BMI which point to sad realization that with 
+higher age we tend to neglect our fitness and this the BMI deteriorates with age.
 
+[Full data report](./documentation/full_data.html).
 
 
 ### Methodology
 
-We have used IKEM data to build predictive model that would predict whether the patient has CKD based on laboratory
-results.  We have employed Machine Learning and Data Science to come up with a solution that helps determine risky 
-patients together with a strategy which would target and incentivize groups at risk. 
-Our predictive model can accurately determine a CKD patient by identifying core subgroup of 20% in our data
-which contained 99%
+
 
 ### Further suggestions
 
