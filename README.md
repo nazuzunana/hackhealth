@@ -27,6 +27,37 @@ For this challenge we got anonymized data from IKEM containing test results and 
 ### Preparation and exploration
 
 For data exploration we have used pandas_explain module which provides comprehensive reports about data.
+One of our goals in the data preparation was to aggregate tests into single NCLP code as in essence they 
+measure the same metrics. 
+
+**Laboratory dataset**
+
+Full data exploration results for laboratory test can be found it this dashboard 
+[Laboratory data report](./documentation/labs_data_report.html) where you can see that we have evenly distributed
+data across time. As a main data feature from this code we have selected NCLP code which corresponds to state code
+for specific test. From our exploratory dashboard we can see that the NCLP code is present at nearly 90% of entries. 
+The missing values were suplemented from the Analyte column based on creating mapping between different names to NCLP code.
+
+After analysing Code feature in the dateset we identified that it contained only test requiered for transplantation procedure.
+Thus we concluded that patients with these samples were either in very late stages of CKD or completely healthy,
+which are considered as outliers in our usecase thus we opted for removing those entries.
+
+
+**Diagnoses dataset**
+
+Full data exploration results for diagnosis can be found in this dashboard 
+[Diagnosis data report](./documentation/diag_clean.html). In this dataset we can see that the age of participants
+is highly concentrated in older population with mean age of 67 years. This can lead to bias to age as a predictor
+as in real world with increasing age we get higher tendency for chronical disease. Second finding in this dataset is that 
+it may look like we have diagnosis just from 2 years, 2015 and 2022. After consultation with data owner that this could
+be caused by the fact that they have selected patients which had entry check (first diagnosis) in 2015 and then add subsequent
+cohort of CKD patients from 2022. 
+
+**Synthetic dataset**
+
+This was used to ˚
+
+
 
 ### Methodology
 
@@ -42,31 +73,7 @@ which contained 99%
    - Group 1 (age < 40) : Early Detection - educate and use available data without forcing additional tests (e.g. BMI, 
    - Group 2 (age 40 - 65) : Riskier - Identify “available” tests that have predictive power w.r.t. to CKD, incentivize people to test and report the results
    - Group 3 (age >65) : High alert - Incentivize people to undergo specialized tests that determine the disease.
-
-
-### Preprocessed/diagnoses.csv
-* patient_id
-* date
-* main_code
-* main_description
-* other_code
-* other_description
-* is_ckd - 1 if one of the diagnosis is CKD
-* is_dia - 1 if one of the diagnosis is Diabetes
-* ckd_stadium	- stadium of CKD (not filled for all entries) of the diagnoses
-* min_date	- patient first diagnosis
-* max_date	- patient max diagnosis
-* cnt_rows	- number of rows of the patient
-* cnt_visits	- number of visits (unique dates of the patient)
-* is_ckd_patient	- is the patient ckd (whenever in time)
-* is_dia_patient	- is the patient diabetic (whenever in time)
-* date_range	- diff between first and last visit in days
-* min_ckd_date	- first date of ckd diagnosis of the patient
-* min_dia_date	- first date of diabetes diagnoses of the patient
-* is_ckd_cum	- cummulative CKD (once patient is diagnosed, it is flagged as CKD from that point on)
-* is_dia_cum - cummulative diabetes (once patient is diagnosed, it is flagged as Dia from that point on)
-
-
+   
 ## Authors
 
 Pavel Milicka - pmilicka (at) deloittece.com
