@@ -94,7 +94,16 @@ Literature:
  - https://academic.oup.com/ndt/article/35/9/1527/5369192
  - 
 
+## Model 
 
+We have trained multiple XGBoost classifier models on prepared synthetic data as described in the Data section. One of the 
+final models where we have excluded GFR measures (because they are definition of CKD) had as a core predictiors Age,
+BMI, Leukocytes in blood, Urea test, Hematocrits and Eurocytes in the blood. The importance of features can be seen on the 
+figure below. 
+
+[Fuature importance for Model 1](./documentation/feature_importance.png).
+
+This model as it can be seen above had 99% accuracy as shown in the solution section.
 
 ### Further suggestions
 
@@ -102,6 +111,13 @@ Literature:
    - Group 1 (age < 40) : Early Detection - educate and use available data without forcing additional tests (e.g. BMI, 
    - Group 2 (age 40 - 65) : Riskier - Identify “available” tests that have predictive power w.r.t. to CKD, incentivize people to test and report the results
    - Group 3 (age >65) : High alert - Incentivize people to undergo specialized tests that determine the disease.
+- Further normalization of dataset
+  - For example there are multiple occurances of the same test measures which can be consolidated into single value and increase predictive ability of model
+- Train model on whole dataset or specific tests based on expert recommendation
+  - Here we could aim for test which can be cost effective and simple to evaluate
+- Further explore different models 
+  - For example SVM or Random-Forest or self-training models like Reinforcement learning to discover strategy for CKD identifications
+- Define education strategy
    
 ## Authors
 
