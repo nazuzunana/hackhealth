@@ -448,6 +448,15 @@ class DataFinalizer:
             data[col] = pd.Categorical(data[col])
         return data
 
+    def balance_data(self, data:pd.DataFrame, target_col:str = 'is_ckd') -> pd.DataFrame:
+        eq_one = data[data[target_col] == 1]
+        eq_zero = data[data[target_col] == 0]
+        size_cal = eq_one.shape[0] * 20
+        sampled_zero = eq_zero.sample(n=size_cal)
+        data =pd.concat([eq_one, sampled_zero], ignore_index=True).sample(frac=1)
+        assert data.shape[1] == eq_zero.shape[1]
+        return data
+
     def run(self):
         lab_data, diag_data = self.load_data()
         diag_data = self.flatten_data(data=diag_data)
@@ -455,6 +464,7 @@ class DataFinalizer:
         data = self.merge_data(lab_data=lab_data, diag_data=diag_data)
         data = self.one_hot_enc(data=data)
         data = self.process_categorical(data=data)
+        data = self.balance_data(data=data)
         data.to_pickle(f"{CLEAN_PTH}/full_data.pkl")
 
 
