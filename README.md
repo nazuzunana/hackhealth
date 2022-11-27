@@ -15,25 +15,34 @@ CKD are:
 
 ## Proposed goals and solution 
 
-Using data, we aim to identify people prone to having CKD to detect the disease as early as possible.
+Using data, we aim to identify people prone to having CKD to detect the disease as early as possible using 
+most prevalent test and baseline information like age or bmi to enable simple indentification at early stage
+for more descriptive tests.
 
- - Employ different models and incentives based on the probability:
+## Data 
+
+For this challenge we got anonymized data from IKEM containing test results and list of diagnoses including CKD. 
+
+
+### Preparation and exploration
+
+For data exploration we have used pandas_explain module which provides comprehensive reports about data.
+
+### Methodology
+
+We have used IKEM data to build predictive model that would predict whether the patient has CKD based on laboratory
+results.  We have employed Machine Learning and Data Science to come up with a solution that helps determine risky 
+patients together with a strategy which would target and incentivize groups at risk. 
+Our predictive model can accurately determine a CKD patient by identifying core subgroup of 20% in our data
+which contained 99%
+
+### Further suggestions
+
+- Employ different models and incentives based on the probability:
    - Group 1 (age < 40) : Early Detection - educate and use available data without forcing additional tests (e.g. BMI, 
    - Group 2 (age 40 - 65) : Riskier - Identify “available” tests that have predictive power w.r.t. to CKD, incentivize people to test and report the results
    - Group 3 (age >65) : High alert - Incentivize people to undergo specialized tests that determine the disease.
 
-## Data 
-
-### Preparation and exploration
-
-
-### Methodology
-
-
-
-### Findings
-
-### Recommendations
 
 ### Preprocessed/diagnoses.csv
 * patient_id
@@ -56,3 +65,10 @@ Using data, we aim to identify people prone to having CKD to detect the disease 
 * min_dia_date	- first date of diabetes diagnoses of the patient
 * is_ckd_cum	- cummulative CKD (once patient is diagnosed, it is flagged as CKD from that point on)
 * is_dia_cum - cummulative diabetes (once patient is diagnosed, it is flagged as Dia from that point on)
+
+
+## Authors
+
+Pavel Milicka - pmilicka (at) deloittece.com
+Kajetan Poliak - kpoliak (at) deloittece.com
+Matej Marcisin - mmarcisin (at) deloittece.com
