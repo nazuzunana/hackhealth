@@ -1,5 +1,8 @@
 
 *.csv
 *.xlsx
-*.ipynb
+Untitled*.ipynb
 *.pkl
+src/*ipynb_checkpoints/*
+*.html
+*.json

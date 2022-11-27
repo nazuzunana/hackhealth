@@ -197,6 +197,27 @@ if __name__ == "__main__":
     test_prediction = predict(model=model, data=X_test)
 
     report = model_evaluation(y_true=y_test, y_pred=pd.DataFrame(eval_preds))
-    features = data.columns.values
+    features = list(data.columns.values)
     features.remove("is_ckd")
     importance = feature_importance(model=model, data=X_train, features=features)
+    report['feature_importnace'] = importance
+    print(report)
+    
+    # with open('result.json', 'w') as fp:
+    #     json.dump(report, fp)
+
+    from explainerdashboard import ClassifierExplainer, ExplainerDashboard
+    X = data.drop(["is_ckd"], axis=1)#.values  # independant features
+    y = data["is_ckd"]#.values  # dependant variable
+
+    # Choose your test size to split between training and testing sets:
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.25, random_state=42
+    )
+    cats = ['POD', 'result', 'sex', 'is_dia']
+    cols = list(X_train.columns.values)
+    cats = [x for x in cats if x in cols]
+    for c in cats:
+        X_test[c] = X_test[c].astype(int)
+    explainer = ClassifierExplainer(model, X_test, y_test)
+    ExplainerDashboard(explainer).save_html(filename='./explainer_t30.html')
