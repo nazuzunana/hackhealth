@@ -77,7 +77,22 @@ higher age we tend to neglect our fitness and this the BMI deteriorates with age
 [Full data report](./documentation/full_data.html).
 
 
-### Methodology
+### Methodology & Sources
+
+NCLP -> https://www2.ikem.cz/plm_lp/_LP_12273-L0000006.htm , https://www2.ikem.cz/plm_lp/HVEZDAADBQ.htm
+
+Literature:
+ - https://www.cdc.gov/kidneydisease/pdf/Chronic-Kidney-Disease-in-the-US-2021-h.pdf
+ - https://www.frontiersin.org/articles/10.3389/fmed.2022.903090/full
+ - https://journalofbigdata.springeropen.com/articles/10.1186/s40537-022-00657-5
+ - https://ieeexplore.ieee.org/document/9888564
+ - https://link.springer.com/article/10.1007/s44174-022-00027-y
+ - https://ieeexplore.ieee.org/document/9185249
+ - https://www.nature.com/articles/s41598-022-06665-y
+ - https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2649736/
+ - https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2649736/figure/F1/
+ - https://academic.oup.com/ndt/article/35/9/1527/5369192
+ - 
 
 
 
