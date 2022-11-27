@@ -101,7 +101,7 @@ final models where we have excluded GFR measures (because they are definition of
 BMI, Leukocytes in blood, Urea test, Hematocrits and Eurocytes in the blood. The importance of features can be seen on the 
 figure below. 
 
-[Fuature importance for Model 1](./documentation/feature_importance.png).
+![Fuature importance for Model 1](./documentation/feature_importance.png).
 
 This model as it can be seen above had 99% accuracy as shown in the solution section.
 
